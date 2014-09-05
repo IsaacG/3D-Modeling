@@ -1,3 +1,6 @@
+// Honeycomb code taken from:
+// PrzemoF @ http://forum.openscad.org/Beginner-Honeycomb-advice-needed-td4556.html
+// Post: http://forum.openscad.org/Beginner-Honeycomb-advice-needed-tp4556p4592.html
 module hc_column(length, cell_size, wall_thickness) {
   no_of_cells = floor(length / (cell_size + wall_thickness)) ;
 
