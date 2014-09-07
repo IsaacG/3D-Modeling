@@ -29,4 +29,11 @@ module letter_e() {
         [thickness,thickness], [width,thickness], [width,0]]);
 }
 
-translate([0, 0, height-embossed]) scale([5,5,embossed]) color("red") letter_e();
+*translate([0, 0, height-embossed]) scale([5,5,embossed]) color("red") letter_e();
+
+translate([-32.3,-20,height-embossed/2])
+  linear_extrude(height = embossed, center = true, convexity = 10)
+    import (file = "coaster_files/5.dxf", layer = "aa");
+
+%cube([1, height*3, height*3], center=true);
+%cube([height*3, 1, height*3], center=true);
