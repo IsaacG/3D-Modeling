@@ -31,9 +31,9 @@ module honeycomb (length, width, height, cell_size, wall_thickness) {
 // if (sqrt(pow(i * tr_x + off_x, 2) + pow((i % 2) * tr_y + off_y, 2)) > 100)
 
 //honeycomb(length, width, height, cell_size, wall_thickness);
-size=450;
-height=15;
-outer_ring=60;
+size=85;
+height=1.5;
+outer_ring=12;
 
 module center_section (use_hex_center)
 {
@@ -45,18 +45,18 @@ module center_section (use_hex_center)
    cylinder(h=height, d=size);
 }
 
-use_hex_center = 1;
+use_hex_center = 0;
 
 // Honeycomb
 intersection() {
-  translate(v = [-size/2, -size/2, height/2]){ honeycomb(size, size, height, 60, 17); }
+  translate(v = [-size/2, -size/2, height/2]){ honeycomb(size, size, height, 10, 2); }
   center_section(use_hex_center);
 }
 
 // Ring around the edge
 if (true)
   difference(){
-    cylinder(h=height, d=size+outer_ring);
+    cylinder(h=height, d=size+outer_ring, $fs=0.01);
     center_section(use_hex_center);
   }
 
@@ -69,4 +69,4 @@ if (true)
 for (r=[0:60:300]) 
   rotate(r + use_hex_center * 30) 
     translate([(size+outer_ring/2)/2 - use_hex_center*outer_ring/2.5, 0, height]) 
-      cylinder(h=height*2.0, r1=outer_ring/4-5, r2=8, center=false);
+      cylinder(h=height*4, r1=3, r2=2, center=false, $fs=0.3);
