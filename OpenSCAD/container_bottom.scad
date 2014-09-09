@@ -1,36 +1,7 @@
-// Honeycomb code taken from:
-// PrzemoF @ http://forum.openscad.org/Beginner-Honeycomb-advice-needed-td4556.html
-// Post: http://forum.openscad.org/Beginner-Honeycomb-advice-needed-tp4556p4592.html
-module hc_column(length, cell_size, wall_thickness) {
-  no_of_cells = floor(length / (cell_size + wall_thickness)) ;
+use <lib/honeycomb.scad>;
 
-  for (i = [0 : no_of_cells]) {
-    translate([0,(i * (cell_size + wall_thickness)),0])
-       circle($fn = 6, r = cell_size * (sqrt(3)/3));
-  }
-}
+use_hex_center = 0;
 
-module honeycomb (length, width, height, cell_size, wall_thickness) {
-  no_of_rows = floor(1.2 * length / (cell_size + wall_thickness)) ;
-
-  tr_mod = cell_size + wall_thickness;
-  tr_x = sqrt(3)/2 * tr_mod;
-  tr_y = tr_mod / 2;
-  off_x = -1 * wall_thickness / 2;
-  off_y = wall_thickness / 2;
-  linear_extrude(height = height, center = true, convexity = 10, twist = 0, slices = 1)
-    difference(){
-      square([length, width]);
-      for (i = [0 : no_of_rows]) {
-        assign(x_pos = i * tr_x + off_x, y_pos = (i % 2) * tr_y + off_y)
-          translate([x_pos, y_pos, 0])
-           hc_column(width, cell_size, wall_thickness);
-      }
-    }
-}
-// if (sqrt(pow(i * tr_x + off_x, 2) + pow((i % 2) * tr_y + off_y, 2)) > 100)
-
-//honeycomb(length, width, height, cell_size, wall_thickness);
 size=85;
 height=1.5;
 outer_ring=12;
@@ -40,14 +11,14 @@ module center_section (use_hex_center)
   if (use_hex_center)
     translate(v = [0, 0, height/2])
       linear_extrude(height = height, center = true, convexity = 10, twist = 0, slices = 1)
-        circle($fn = 6, d = size);
+        circle($fn = 0.5, d = size);
   else
    cylinder(h=height, d=size);
 }
 
-use_hex_center = 0;
 
 // Honeycomb
+//honeycomb(length, width, height, cell_size, wall_thickness);
 intersection() {
   translate(v = [-size/2, -size/2, height/2]){ honeycomb(size, size, height, 10, 2); }
   center_section(use_hex_center);
@@ -56,14 +27,9 @@ intersection() {
 // Ring around the edge
 if (true)
   difference(){
-    cylinder(h=height, d=size+outer_ring, $fs=0.01);
+    cylinder(h=height, d=size+outer_ring, $fs=0.05);
     center_section(use_hex_center);
   }
-
-
-// z-axis
-// cylinder(h=50, r=1, center=false);
-
 
 // Feet
 for (r=[0:60:300]) 
