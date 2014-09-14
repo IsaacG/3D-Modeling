@@ -2,7 +2,7 @@ use <lib/honeycomb.scad>;
 
 use_hex_center = 0;
 
-size=85;
+size=80;
 height=1.5;
 outer_ring=12;
 
