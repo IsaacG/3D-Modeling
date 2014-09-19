@@ -3,13 +3,13 @@ use <lib/honeycomb.scad>;
 
 use_hex_center = 0;
 
-size = 80;
+size = 75;
 height = 1.5;
 outer_ring = 12;
 indents = 7;
 
 debug_sizing = false;
-// height = 0.5;
+// height = 0.8;
 
 module center_section (use_hex_center)
 {
@@ -38,7 +38,7 @@ edge_ring(height);
 
 if (debug_sizing)
   translate([(size+outer_ring/2)/2 - use_hex_center*outer_ring/2.5, 0, height]) 
-    cylinder(h=10, r1=2, r2=2, center=false, $fs=0.3);
+    cylinder(h=5, r1=2, r2=2, center=false, $fs=0.3);
 
 
 // Honeycomb
