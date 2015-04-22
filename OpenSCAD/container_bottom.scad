@@ -23,8 +23,6 @@ module edge_ring(height) {
   }
 }
 
-edge_ring(height);
-
 // Honeycomb
 intersection() {
   // Shift by 9 to get a honeycomb centered in the middle
@@ -33,8 +31,13 @@ intersection() {
   center_section();
 }
 
-// Feet
-for (r=[30:60:330]) 
-  rotate(r) 
-    translate([(size+outer_ring/2)/2-0.2, 0, height]) 
-      cylinder(h=height*4, r1=2.9, r2=2, center=false, $fs=0.3);
+rotate([0,0,60]) union() {
+  edge_ring(height);
+
+  // Feet
+  for (r=[30:60:330]) 
+    rotate(r) 
+      translate([(size+outer_ring/2)/2-0.2, 0, height]) 
+        cylinder(h=height*4, r1=2.9, r2=2, center=false, $fs=0.3);
+
+}
