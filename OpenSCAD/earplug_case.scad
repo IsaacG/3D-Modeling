@@ -1,22 +1,18 @@
-thickness = 2;
-lip = 1;
-outside = 27;
-height = 12;
+thickness = 1;
+outside = 32;
+height = 18;
 
+/*
+lip = 1;
 
 module box() {
   inside = outside - 2 * thickness;
   difference () {
     cube([outside, outside, height], false);
-    // union () {
-      translate([thickness, thickness, thickness]) 
-        cube([inside, inside, height], false);
-    //   translate([lip, lip, height - 2 * lip])
-    //     cube([outside - 2 * lip, outside - 2 * lip, lip], false);
-    // };
+    translate([thickness, thickness, thickness]) 
+      cube([inside, inside, height], false);
   };
 };
-
 
 module bump (size, rot) {
   rotate([0,0,90*rot]) { 
@@ -24,7 +20,7 @@ module bump (size, rot) {
       sphere(size, $fn=20);
       translate ([size * 2,0,0]) cube([size*4,size*4,size*4], true);
     };
-};
+  };
 };
 
 
@@ -71,5 +67,57 @@ module lid() {
 };
 
 
-translate ([1.1 * outside, 0, 0]) lid();
-box();
+// translate ([1.1 * outside, 0, 0]) lid();
+// box();
+
+*/
+
+module round_box(rad) {
+  $fn = 60;
+  hull() {
+    translate ([0 + rad, 0 + rad, 0]) circle(r=rad);
+    translate ([outside + rad, 0 + rad, 0]) circle(r=rad);
+    translate ([0 + rad, outside + rad, 0]) circle(r=rad);
+    translate ([outside + rad, outside + rad, 0]) circle(r=rad);
+  };
+};
+
+r=3;
+module box (r) {
+  // Base
+  linear_extrude(thickness) round_box(r);
+
+  // Walls
+  linear_extrude(height) {
+    difference() {
+      round_box(r);
+      offset(r=-thickness) { round_box(r); };
+    };
+  };
+};
+  
+module lid (r) {
+  // Base
+  linear_extrude(thickness) offset(thickness) round_box(r);
+  // Lip
+  linear_extrude(thickness * 2.5) difference() {
+    offset(-thickness * 1.5) round_box(r);
+    offset(-thickness * 2.5) round_box(r);
+  };
+  // Inside
+  difference () {
+    translate ([outside/2 + r, outside/2 + r, thickness])
+      cylinder (r1 = (outside + thickness + r)/2, r2 = (outside + r)/2, h = thickness * 1.5, $fn = 150);
+    linear_extrude(thickness * 2.6) offset(-thickness * 1.5) round_box(r);
+  };
+};
+
+// translate ([outside * 2.3 + r*2, 0, height + thickness * 2]) rotate ([0, 180, 0]) lid(r);
+translate ([4, 0, 0]) union() {
+  lid(r);
+  translate ([outside * 1.3, 0, 0]) box(r);
+};
+
+cube ([1, outside, 0.5]);
+
+
