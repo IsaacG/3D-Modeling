@@ -1,0 +1,1 @@
+Rectangular shaving brush stand
